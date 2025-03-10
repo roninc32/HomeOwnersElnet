@@ -1,0 +1,118 @@
+﻿@{
+    ViewData["Title"] = "Sign In";
+}
+
+<div class="fixed inset-0 flex items-center justify-center bg-cover bg-center" style="background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1560185007-cde436f6a4d0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');">
+    <div class="w-full max-w-sm bg-white p-6 rounded-lg shadow-lg border border-slate-100">
+        <div class="mb-3">
+            <h1 class="text-center text-2xl font-serif font-bold text-slate-800">Welcome Back</h1>
+            <p class="text-center text-sm text-slate-600">Sign in to your resident portal</p>
+        </div>
+
+        <div id="error-message" class="bg-red-50 p-2 mb-3 rounded hidden">
+            <div class="flex items-center">
+                <svg class="h-4 w-4 text-red-400 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+                <p class="text-sm font-medium text-red-800 ml-2" id="error-text">Invalid credentials</p>
+            </div>
+        </div>
+
+        <form class="space-y-4" action="@Url.Action("LoginSubmit", "Home")" method="POST" id="loginForm" onsubmit="return validateStaticLogin(event)">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="remember" value="true">
+
+            <div>
+                <label for="username" class="block text-sm font-medium text-slate-700">Email or username</label>
+                <div class="relative mt-1">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-4 w-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                        </svg>
+                    </div>
+                    <input id="username" name="username" type="text" required class="appearance-none block w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-500 text-sm" placeholder="Enter username">
+                </div>
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-slate-700">Password</label>
+                <div class="relative mt-1">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-4 w-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <input id="password" name="password" type="password" required class="appearance-none block w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-500 text-sm" placeholder="Enter password">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-slate-600 focus:ring-slate-500 border-slate-300 rounded">
+                    <label for="remember-me" class="ml-2 block text-sm text-slate-600">Remember me</label>
+                </div>
+                <a href="/Account/ForgotPassword" class="font-medium text-sm text-slate-700 hover:text-slate-900">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-slate-700 hover:bg-slate-800 focus:outline-none">Log In</button>
+            
+            <div class="text-center">
+                <p class="text-sm text-slate-600">
+                    Need an account? 
+                    <a href="@Url.Action("Register", "Home")" class="font-medium text-slate-700 hover:text-slate-900">Register</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Function to get URL parameters
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    // Static account validation
+    function validateStaticLogin(e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // Static credentials for testing
+        const staticUsername = "admin";
+        const staticPassword = "123";
+
+        if (username === staticUsername && password === staticPassword) {
+            // Make sure the action name matches exactly with the controller method
+            window.location.href = '@Url.Action("HomePage", "Home")';
+            return false;
+        } else {
+            // Show error message for invalid credentials
+            document.getElementById('error-message').classList.remove('hidden');
+            document.getElementById('error-text').innerText = "Invalid username or password.";
+            return false;
+        }
+    }
+
+    // Check for login status from URL parameters
+    window.onload = function () {
+        var loginStatus = getUrlParameter('loginStatus');
+        var errorMsg = getUrlParameter('errorMsg');
+
+        if (loginStatus === 'failed') {
+            // Show error message
+            document.getElementById('error-message').classList.remove('hidden');
+            if (errorMsg) {
+                document.getElementById('error-text').innerText = errorMsg;
+            }
+        } else if (loginStatus === 'success') {
+            // Make sure the action name matches exactly with the controller method
+            window.location.href = '@Url.Action("HomePage", "Home")';
+        }
+    };
+</script>

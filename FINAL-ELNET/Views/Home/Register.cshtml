@@ -1,0 +1,116 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="fixed inset-0 flex items-center justify-center bg-cover bg-center" style="background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1560185007-cde436f6a4d0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80');">
+    <div class="w-full max-w-md bg-white p-6 rounded-lg shadow-lg border border-slate-100">
+        <div class="mb-3">
+            <h1 class="text-center text-2xl font-serif font-bold text-slate-800">Create an Account</h1>
+            <p class="text-center text-sm text-slate-600">Join our community of residents</p>
+        </div>
+
+        <div id="error-message" class="bg-red-50 p-2 mb-3 rounded hidden">
+            <div class="flex items-center">
+                <svg class="h-4 w-4 text-red-400 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                </svg>
+                <p class="text-sm font-medium text-red-800 ml-2" id="error-text">Invalid info</p>
+            </div>
+        </div>
+
+        <form class="space-y-3" action="@Url.Action("Register", "Account")" method="POST">
+            @Html.AntiForgeryToken()
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label for="firstName" class="block text-sm font-medium text-slate-700">First name</label>
+                    <input id="firstName" name="firstName" type="text" required class="appearance-none block w-full px-3 py-1.5 border border-slate-200 rounded-lg text-slate-800 focus:outline-none text-sm" placeholder="First name">
+                </div>
+                <div>
+                    <label for="lastName" class="block text-sm font-medium text-slate-700">Last name</label>
+                    <input id="lastName" name="lastName" type="text" required class="appearance-none block w-full px-3 py-1.5 border border-slate-200 rounded-lg text-slate-800 focus:outline-none text-sm" placeholder="Last name">
+                </div>
+            </div>
+
+            <div>
+                <label for="email" class="block text-sm font-medium text-slate-700">Email address</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-4 w-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                        </svg>
+                    </div>
+                    <input id="email" name="email" type="email" required class="appearance-none block w-full pl-9 pr-3 py-1.5 border border-slate-200 rounded-lg text-slate-800 focus:outline-none text-sm" placeholder="you@example.com">
+                </div>
+            </div>
+
+            <div>
+                <label for="username" class="block text-sm font-medium text-slate-700">Username</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-4 w-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <input id="username" name="username" type="text" required class="appearance-none block w-full pl-9 pr-3 py-1.5 border border-slate-200 rounded-lg text-slate-800 focus:outline-none text-sm" placeholder="Choose a username">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label for="password" class="block text-sm font-medium text-slate-700">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-4 w-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <input id="password" name="password" type="password" required class="appearance-none block w-full pl-9 pr-3 py-1.5 border border-slate-200 rounded-lg text-slate-800 focus:outline-none text-sm" placeholder="Password">
+                    </div>
+                </div>
+                <div>
+                    <label for="confirmPassword" class="block text-sm font-medium text-slate-700">Confirm</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-4 w-4 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <input id="confirmPassword" name="confirmPassword" type="password" required class="appearance-none block w-full pl-9 pr-3 py-1.5 border border-slate-200 rounded-lg text-slate-800 focus:outline-none text-sm" placeholder="Confirm password">
+                    </div>
+                </div>
+            </div>
+            <p class="text-xs text-slate-500">Password must be at least 8 characters with letters and numbers</p>
+
+            <div class="flex items-center">
+                <input id="agree-terms" name="agree-terms" type="checkbox" required class="h-4 w-4 text-slate-600 focus:ring-slate-500 border-slate-300 rounded">
+                <label for="agree-terms" class="ml-2 block text-sm text-slate-700">
+                    I agree to the <a href="#" class="text-slate-700 hover:text-slate-900">Terms</a> and <a href="#" class="text-slate-700 hover:text-slate-900">Privacy Policy</a>
+                </label>
+            </div>
+
+            <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-slate-700 hover:bg-slate-800 focus:outline-none">Create Account</button>
+            
+            <div class="text-center">
+                <p class="text-sm text-slate-600">
+                    Already have an account? <a href="@Url.Action("Login", "Home")" class="font-medium text-slate-700 hover:text-slate-900">Sign in</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Client-side validation
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            document.getElementById('error-message').classList.remove('hidden');
+            document.getElementById('error-text').innerText = 'Passwords do not match.';
+        }
+    });
+</script>

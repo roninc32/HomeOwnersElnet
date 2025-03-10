@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FINAL-ELNET", "FINAL-ELNET\FINAL-ELNET.csproj", "{F8DC3F8E-8D68-467F-A29A-35CD488BA891}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8DC3F8E-8D68-467F-A29A-35CD488BA891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8DC3F8E-8D68-467F-A29A-35CD488BA891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8DC3F8E-8D68-467F-A29A-35CD488BA891}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8DC3F8E-8D68-467F-A29A-35CD488BA891}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1E3A87A1-8CF9-4E2E-850A-82FE4441E295}
+	EndGlobalSection
+EndGlobal
