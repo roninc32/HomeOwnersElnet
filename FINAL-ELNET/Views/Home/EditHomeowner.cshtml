@@ -1,0 +1,13 @@
+﻿@model FINAL_ELNET.Models.Homeowner
+
+<h2 class="text-2xl font-bold mb-4">Edit Homeowner</h2>
+
+<form method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="Id" value="@Model.Id">
+    <input type="text" name="Name" value="@Model.Name" required class="border p-2 rounded">
+    <input type="email" name="Email" value="@Model.Email" required class="border p-2 rounded">
+    <input type="text" name="Phone" value="@Model.Phone" required class="border p-2 rounded">
+    <input type="text" name="Address" value="@Model.Address" required class="border p-2 rounded">
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Update</button>
+</form>

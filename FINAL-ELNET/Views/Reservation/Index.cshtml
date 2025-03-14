@@ -1,0 +1,167 @@
+﻿@model FINAL_ELNET.Models.ReservationViewModel
+@{
+    ViewData["Title"] = "Facility Reservation";
+}
+
+<div class="min-h-screen bg-slate-50 py-12">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Page Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-3xl font-bold text-slate-900">Facility Reservation</h1>
+                <p class="mt-4 text-slate-600">Book community amenities for your events and activities</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="mb-8 border-b border-slate-200">
+                <div class="flex space-x-8">
+                    <a href="@Url.Action("Index", "Reservation")" class="border-b-2 border-slate-900 py-4 text-slate-900 font-medium">
+                        Make a Reservation
+                    </a>
+                    <a href="@Url.Action("MyReservations", "Reservation")" class="border-b-2 border-transparent py-4 text-slate-500 hover:text-slate-700 font-medium">
+                        My Reservations
+                    </a>
+                </div>
+            </div>
+
+            <!-- Reservation Form -->
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                @if (TempData["Error"] != null)
+                {
+                    <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-red-700">@TempData["Error"]</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <form asp-controller="Reservation" asp-action="Create" method="post">
+                    <div class="p-6 sm:p-8">
+                        <div class="space-y-6">
+                            <!-- Facility Type -->
+                            <div>
+                                <label asp-for="FacilityType" class="block text-sm font-medium text-slate-700 mb-1">Facility Type</label>
+                                <select asp-for="FacilityType" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-slate-500 focus:ring-slate-500">
+                                    <option value="">Select a facility</option>
+                                    @foreach (var facility in ViewBag.FacilityTypes)
+                                    {
+                                        <option value="@facility">@facility</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="FacilityType" class="text-sm text-red-600"></span>
+                            </div>
+
+                            <!-- Date and Time selection (2-column layout) -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <!-- Reservation Date -->
+                                <div>
+                                    <label asp-for="ReservationDate" class="block text-sm font-medium text-slate-700 mb-1">Date</label>
+                                    <input asp-for="ReservationDate" type="date" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-slate-500 focus:ring-slate-500"
+                                           min="@DateTime.Today.ToString("yyyy-MM-dd")">
+                                    <span asp-validation-for="ReservationDate" class="text-sm text-red-600"></span>
+                                </div>
+
+                                <!-- Start and End Time -->
+                                <div class="grid grid-cols-2 gap-4">
+                                    <!-- Start Time -->
+                                    <div>
+                                        <label asp-for="StartTime" class="block text-sm font-medium text-slate-700 mb-1">Start Time</label>
+                                        <select asp-for="StartTime" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-slate-500 focus:ring-slate-500">
+                                            <option value="">Select</option>
+                                            @foreach (var time in ViewBag.AvailableTimes)
+                                            {
+                                                <option value="@time">@time</option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="StartTime" class="text-sm text-red-600"></span>
+                                    </div>
+
+                                    <!-- End Time -->
+                                    <div>
+                                        <label asp-for="EndTime" class="block text-sm font-medium text-slate-700 mb-1">End Time</label>
+                                        <select asp-for="EndTime" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-slate-500 focus:ring-slate-500">
+                                            <option value="">Select</option>
+                                            @foreach (var time in ViewBag.AvailableTimes)
+                                            {
+                                                <option value="@time">@time</option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="EndTime" class="text-sm text-red-600"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Number of Guests -->
+                            <div>
+                                <label asp-for="NumberOfGuests" class="block text-sm font-medium text-slate-700 mb-1">Number of Guests</label>
+                                <input asp-for="NumberOfGuests" type="number" min="1" max="100" value="1" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-slate-500 focus:ring-slate-500">
+                                <span asp-validation-for="NumberOfGuests" class="text-sm text-red-600"></span>
+                            </div>
+
+                            <!-- Special Requests -->
+                            <div>
+                                <label asp-for="SpecialRequests" class="block text-sm font-medium text-slate-700 mb-1">Special Requests</label>
+                                <textarea asp-for="SpecialRequests" rows="3" class="block w-full rounded-md border-slate-300 shadow-sm focus:border-slate-500 focus:ring-slate-500 resize-none"
+                                          placeholder="Any special equipment or setup requirements?"></textarea>
+                                <span asp-validation-for="SpecialRequests" class="text-sm text-red-600"></span>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div>
+                                <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">
+                                    Submit Reservation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Policy Panel -->
+            <div class="mt-8 bg-white shadow-md rounded-lg overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-lg font-medium text-slate-900 mb-4">Reservation Policy</h3>
+                    <div class="text-sm text-slate-600 space-y-4">
+                        <p>Please review our facility reservation policies:</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li>Reservations must be made at least 24 hours in advance</li>
+                            <li>Cancellations must be made at least 12 hours before the scheduled time</li>
+                            <li>Users are responsible for any damages incurred during their reservation period</li>
+                            <li>Function halls require a minimum of 2 hours booking</li>
+                            <li>Swimming pool areas can be reserved for a maximum of 3 hours per booking</li>
+                            <li>Sports courts can be reserved for a maximum of 2 hours per booking</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            // Validate that end time is after start time
+            $('form').submit(function (e) {
+                var startTime = $('#StartTime').val();
+                var endTime = $('#EndTime').val();
+
+                if (startTime && endTime) {
+                    if (startTime >= endTime) {
+                        e.preventDefault();
+                        alert('End time must be after start time');
+                        return false;
+                    }
+                }
+            });
+        });
+    </script>
+}

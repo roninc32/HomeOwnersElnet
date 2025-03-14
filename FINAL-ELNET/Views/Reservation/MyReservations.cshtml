@@ -1,0 +1,263 @@
+﻿@model IEnumerable<FINAL_ELNET.Models.ReservationViewModel>
+@{
+    ViewData["Title"] = "My Reservations - Riverside Estates";
+}
+
+<style>
+    @@keyframes fade-in-up {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in-up {
+        animation: fade-in-up 0.6s ease-out;
+    }
+</style>
+
+<div class="min-h-screen relative">
+    <!-- Content wrapper -->
+    <div class="relative z-10">
+        <!-- Header with improved styling -->
+        <header class="bg-white/90 shadow-sm sticky top-0 z-20 backdrop-blur-sm">
+            <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-serif font-bold bg-gradient-to-r from-slate-700 to-slate-500 text-transparent bg-clip-text">Riverside Estates</h1>
+                </div>
+
+                <!-- Navigation links -->
+                <div class="hidden sm:flex sm:items-center sm:space-x-4">
+                    <a href="@Url.Action("HomePage", "Home")" class="px-3 py-2 text-sm font-medium text-slate-700 hover:text-slate-900">Home</a>
+                    <a href="@Url.Action("Announcements", "Community")" class="px-3 py-2 text-sm font-medium text-slate-700 hover:text-slate-900">Announcements</a>
+                    <a href="@Url.Action("Payments", "Billing")" class="px-3 py-2 text-sm font-medium text-slate-700 hover:text-slate-900">Billing</a>
+                    <a href="@Url.Action("Index", "Reservation")" class="px-3 py-2 text-sm font-medium text-slate-700 hover:text-slate-900">Facility Reservation</a>
+
+                    <div class="flex items-center space-x-3">
+                        <a href="@Url.Action("Profile", "Account")" class="px-5 py-2 bg-slate-700 hover:bg-slate-800 text-white font-medium rounded-md transition duration-200 shadow-sm">
+                            My Profile
+                        </a>
+                        <form action="@Url.Action("Logout", "Account")" method="get" class="m-0">
+                            <button type="submit" class="px-5 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-md transition duration-200 shadow-sm">
+                                Log Out
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="bg-slate-50 py-12">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto">
+                    <!-- Page Header -->
+                    <div class="text-center mb-12">
+                        <h1 class="text-3xl font-bold text-slate-900">My Reservations</h1>
+                        <p class="mt-4 text-slate-600">View and manage your facility bookings</p>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="mb-8 border-b border-slate-200">
+                        <div class="flex space-x-8">
+                            <a href="@Url.Action("Index", "Reservation")" class="border-b-2 border-transparent py-4 text-slate-500 hover:text-slate-700 font-medium">
+                                Make a Reservation
+                            </a>
+                            <a href="@Url.Action("MyReservations", "Reservation")" class="border-b-2 border-slate-900 py-4 text-slate-900 font-medium">
+                                My Reservations
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Reservation List -->
+                    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                        <div class="p-6">
+                            @if (TempData["Success"] != null)
+                            {
+                                <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
+                                    <div class="flex">
+                                        <div class="flex-shrink-0">
+                                            <svg class="h-5 w-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-sm text-green-700">@TempData["Success"]</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                            @if (Model != null && Model.Any())
+                            {
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-slate-200">
+                                        <thead class="bg-slate-50">
+                                            <tr>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Facility</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Date</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Time</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="bg-white divide-y divide-slate-200">
+                                            @foreach (var reservation in Model)
+                                            {
+                                                <tr>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
+                                                        @reservation.FacilityType
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700">
+                                                        @reservation.ReservationDate.ToString("MMM d, yyyy")
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700">
+                                                        @reservation.StartTime - @reservation.EndTime
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                        @if (reservation.Status == "Confirmed")
+                                                        {
+                                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                                Confirmed
+                                                            </span>
+                                                        }
+                                                        else if (reservation.Status == "Pending Approval")
+                                                        {
+                                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                                                Pending
+                                                            </span>
+                                                        }
+                                                        else if (reservation.Status == "Cancelled")
+                                                        {
+                                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                                Cancelled
+                                                            </span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-slate-100 text-slate-800">
+                                                                @reservation.Status
+                                                            </span>
+                                                        }
+                                                    </td>
+                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700">
+                                                        <div class="flex space-x-2">
+                                                            @if (reservation.Status != "Cancelled" && reservation.ReservationDate > DateTime.Now)
+                                                            {
+                                                                <a href="#" class="text-slate-600 hover:text-slate-900" title="Edit reservation">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                                    </svg>
+                                                                </a>
+                                                                <button class="text-red-600 hover:text-red-900" title="Cancel reservation"
+                                                                        onclick="return confirm('Are you sure you want to cancel this reservation?');">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                                    </svg>
+                                                                </button>
+                                                            }
+                                                            <a href="#" class="text-slate-600 hover:text-slate-900" title="View details">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                                </svg>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center py-12">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <h3 class="mt-2 text-sm font-medium text-slate-900">No reservations</h3>
+                                    <p class="mt-1 text-sm text-slate-500">You haven't made any facility reservations yet.</p>
+                                    <div class="mt-6">
+                                        <a href="@Url.Action("Index", "Reservation")" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-slate-800 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500">
+                                            Make a reservation
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Calendar View Toggle Button -->
+                    <div class="mt-6 text-center">
+                        <a href="#" class="inline-flex items-center px-4 py-2 border border-slate-300 text-sm font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            View Calendar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Professional Footer -->
+        <footer class="bg-slate-900 py-16 text-white">
+            <div class="container mx-auto px-4">
+                <div class="grid md:grid-cols-4 gap-8">
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">About Us</h4>
+                        <p class="text-sm text-slate-400">Riverside Estates is a premier residential community offering modern amenities and exceptional living experience.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                        <ul class="text-sm text-slate-400 space-y-2">
+                            <li><a href="@Url.Action("HomePage", "Home")" class="hover:text-white">Home</a></li>
+                            <li><a href="@Url.Action("Announcements", "Community")" class="hover:text-white">Announcements</a></li>
+                            <li><a href="@Url.Action("Payments", "Billing")" class="hover:text-white">Billing</a></li>
+                            <li><a href="@Url.Action("Index", "Reservation")" class="hover:text-white">Facilities</a></li>
+                            <li><a href="@Url.Action("Profile", "Account")" class="hover:text-white">My Profile</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                        <p class="text-sm text-slate-400">123 Riverside Drive, Springfield, IL 62704</p>
+                        <p class="text-sm text-slate-400">Phone: (555) 123-4567</p>
+                        <p class="text-sm text-slate-400">Email: info@riversideestates.com</p>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <a href="#" class="text-slate-400 hover:text-white">
+                                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.04c-5.5 0-9.96 4.46-9.96 9.96 0 4.41 2.87 8.14 6.84 9.46.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.15-1.1-1.46-1.1-1.46-.9-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.56 9.56 0 015 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.34 4.7-4.57 4.95.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48a10.01 10.01 0 006.83-9.46c0-5.5-4.46-9.96-9.96-9.96z" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12 pt-8 border-t border-slate-800 text-center">
+                    <p class="text-sm text-slate-500">&copy; @DateTime.Now.Year Riverside Estates. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Animation for table rows
+        document.addEventListener('DOMContentLoaded', function () {
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.animation = `fade-in-up 0.3s ease-out ${index * 0.1}s forwards`;
+            });
+        });
+    </script>
+}

@@ -1,0 +1,123 @@
+﻿@model List<FINAL_ELNET.Models.Homeowner>
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="flex h-screen bg-gray-100">
+
+    <!-- Sidebar Navigation -->
+    <div class="w-64 bg-gray-800 text-white flex flex-col">
+        <div class="text-2xl font-bold p-6 border-b border-gray-700">
+            🏡 Admin Panel
+        </div>
+
+        <nav class="flex-1 px-4 py-2">
+            <a href="#" class="block py-2 px-4 rounded hover:bg-gray-700">🏠 Dashboard</a>
+            <a href="@Url.Action("AdminDashboard", "Home")" class="block py-2 px-4 rounded hover:bg-gray-700">👤 User Management</a>
+            <a href="@Url.Action("AddHomeowner", "Home")" class="block py-2 px-4 rounded hover:bg-gray-700">➕ Add Homeowner</a>
+            <a href="#" class="block py-2 px-4 rounded hover:bg-gray-700">📢 Announcements</a>
+            <a href="#" class="block py-2 px-4 rounded hover:bg-gray-700">💳 Billing & Payments</a>
+            <a href="#" class="block py-2 px-4 rounded hover:bg-gray-700">📆 Facility Reservations</a>
+            <a href="#" class="block py-2 px-4 rounded hover:bg-gray-700">🛠 Service Requests</a>
+            <a href="#" class="block py-2 px-4 rounded hover:bg-gray-700">📄 Documents</a>
+            <a href="#" class="block py-2 px-4 rounded hover:bg-gray-700">🗣 Community Forum</a>
+            <a href="#" class="block py-2 px-4 rounded hover:bg-gray-700">📊 Reports & Analytics</a>
+            <a href="@Url.Action("Index", "Home")" class="block py-2 px-4 mt-6 bg-red-500 rounded hover:bg-red-600">🚪 Logout</a>
+        </nav>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 p-6">
+
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-3xl font-bold text-gray-800">🏠 Dashboard</h2>
+            <input type="text" id="search" class="px-4 py-2 border rounded-lg" placeholder="🔍 Search users..." onkeyup="searchTable()">
+        </div>
+
+        <!-- Quick Stats Cards -->
+        <div class="grid grid-cols-3 gap-4 mb-6">
+            <div class="bg-blue-500 text-white p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold">🏠 250</h3>
+                <p class="text-sm">Registered Homeowners</p>
+            </div>
+            <div class="bg-green-500 text-white p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold">📢 12</h3>
+                <p class="text-sm">New Announcements</p>
+            </div>
+            <div class="bg-yellow-500 text-white p-4 rounded-lg shadow-md">
+                <h3 class="text-xl font-bold">💳 120</h3>
+                <p class="text-sm">Pending Payments</p>
+            </div>
+        </div>
+
+        <!-- Add Homeowner Button -->
+        <div class="mb-4">
+            <a href="@Url.Action("AddHomeowner", "Home")" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">➕ Add Homeowner</a>
+        </div>
+
+        <!-- Homeowners Table -->
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <table class="min-w-full border-collapse w-full">
+                <thead>
+                    <tr class="bg-gray-800 text-white">
+                        <th class="px-6 py-3 text-left">ID</th>
+                        <th class="px-6 py-3 text-left">Name</th>
+                        <th class="px-6 py-3 text-left">Email</th>
+                        <th class="px-6 py-3 text-left">Phone</th>
+                        <th class="px-6 py-3 text-left">Address</th>
+                        <th class="px-6 py-3 text-left">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="homeownerTable">
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        @foreach (var homeowner in Model)
+                        {
+                            <tr class="border-b hover:bg-gray-100 transition">
+                                <td class="px-6 py-4">@homeowner.Id</td>
+                                <td class="px-6 py-4">@homeowner.Name</td>
+                                <td class="px-6 py-4">@homeowner.Email</td>
+                                <td class="px-6 py-4">@homeowner.Phone</td>
+                                <td class="px-6 py-4">@homeowner.Address</td>
+                                <td class="px-6 py-4">
+                                    <a href="@Url.Action("EditHomeowner", "Home", new { id = homeowner.Id })" class="text-blue-500">✏️ Edit</a> |
+                                    <a href="@Url.Action("DeleteHomeowner", "Home", new { id = homeowner.Id })" class="text-red-500" onclick="return confirm('Are you sure?');">🗑 Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">No homeowners found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Search Functionality -->
+<script>
+    function searchTable() {
+        var input = document.getElementById("search").value.toLowerCase();
+        var rows = document.getElementById("homeownerTable").getElementsByTagName("tr");
+
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName("td");
+            var found = false;
+
+            for (var j = 0; j < cells.length; j++) {
+                if (cells[j].innerText.toLowerCase().includes(input)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            rows[i].style.display = found ? "" : "none";
+        }
+    }
+</script>
